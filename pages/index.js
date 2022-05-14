@@ -25,7 +25,7 @@ export default function Home() {
   const [amount, setAmount] = useState('')
 
   return (
-    <div className='p-2'>
+    <div className='m-2 mt-5'>
       <form>
         <Card>
           <CardContent>
