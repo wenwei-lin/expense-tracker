@@ -25,76 +25,78 @@ export default function Home() {
   const [amount, setAmount] = useState('')
 
   return (
-    <div className='m-2 mt-5'>
-      <form>
-        <Card>
-          <CardContent>
-            <div>
-              <h1 className=' text-blue-500'>Record your expense</h1>
-            </div>
-            <div>
-              <FormControl className='w-full'>
-                <TextField
-                  id="title"
-                  label="Title"
-                  variant="outlined"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-              </FormControl>
-              <FormControl className='mt-5 w-full'>
-                <InputLabel htmlFor="category">Category</InputLabel>
-                <Select native defaultValue="" id="category" label="Category" value={category} onChange={e => setCategory(e.target.value)}>
-                  <option aria-label="None" value="" />
-                  <optgroup label="Category 1">
-                    <option value={1}>Option 1</option>
-                    <option value={2}>Option 2</option>
-                  </optgroup>
-                  <optgroup label="Category 2">
-                    <option value={3}>Option 3</option>
-                    <option value={4}>Option 4</option>
-                  </optgroup>
-                </Select>
-              </FormControl>
-              <FormControl className='mt-5 w-full'>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <MobileDatePicker
-                    label="Date"
-                    value={date}
-                    onChange={(newValue) => {
-                      setDate(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
+    <div className='flex justify-center'>
+      <div className='max-w-sm m-2 mt-5'>
+        <form>
+          <Card>
+            <CardContent>
+              <div>
+                <h1 className=' text-blue-500'>Record your expense</h1>
+              </div>
+              <div>
+                <FormControl className='w-full'>
+                  <TextField
+                    id="title"
+                    label="Title"
+                    variant="outlined"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
                   />
-                </LocalizationProvider>
-              </FormControl>
-              <FormControl className='mt-5 w-full'>
-                <TextField
-                  id="remark"
-                  label="Remark"
-                  variant="outlined"
-                  value={remark}
-                  onChange={e => setRemark(e.target.value)}
-                />
-              </FormControl>
-              <FormControl className='mt-5 w-full'>
-                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  startAdornment={<InputAdornment position="start">¥</InputAdornment>}
-                  label="Amount"
-                  type='number'
-                />
-              </FormControl>
-            </div>
-          </CardContent>
-          <CardActions>
-            <Button>Submit</Button>
-          </CardActions>
-        </Card>
-      </form>
+                </FormControl>
+                <FormControl className='mt-5 w-full'>
+                  <InputLabel htmlFor="category">Category</InputLabel>
+                  <Select native defaultValue="" id="category" label="Category" value={category} onChange={e => setCategory(e.target.value)}>
+                    <option aria-label="None" value="" />
+                    <optgroup label="Category 1">
+                      <option value={1}>Option 1</option>
+                      <option value={2}>Option 2</option>
+                    </optgroup>
+                    <optgroup label="Category 2">
+                      <option value={3}>Option 3</option>
+                      <option value={4}>Option 4</option>
+                    </optgroup>
+                  </Select>
+                </FormControl>
+                <FormControl className='mt-5 w-full'>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <MobileDatePicker
+                      label="Date"
+                      value={date}
+                      onChange={(newValue) => {
+                        setDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </FormControl>
+                <FormControl className='mt-5 w-full'>
+                  <TextField
+                    id="remark"
+                    label="Remark"
+                    variant="outlined"
+                    value={remark}
+                    onChange={e => setRemark(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl className='mt-5 w-full'>
+                  <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    startAdornment={<InputAdornment position="start">¥</InputAdornment>}
+                    label="Amount"
+                    type='number'
+                  />
+                </FormControl>
+              </div>
+            </CardContent>
+            <CardActions>
+              <Button>Submit</Button>
+            </CardActions>
+          </Card>
+        </form>
+      </div>
     </div>
   )
 }
