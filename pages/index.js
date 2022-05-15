@@ -1,21 +1,13 @@
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { FormControl, InputLabel, Select, TextField, InputAdornment, OutlinedInput } from '@mui/material';
+import { FormControl, InputLabel, Select, TextField, InputAdornment, OutlinedInput, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import moment from 'moment';
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
 
 export default function Home() {
   const [title, setTitle] = useState('')
@@ -23,6 +15,59 @@ export default function Home() {
   const [date, setDate] = useState(new Date())
   const [remark, setRemark] = useState('')
   const [amount, setAmount] = useState('')
+  const [categories, setCategories] = useState([])
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  const getCategories = async () => {
+    await fetch('https://expense-tracker-api.azurewebsites.net/api/categories')
+      .then(response => response.json())
+      .then(data => {
+        setCategories(data)
+      })
+      .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
+  const submit = () => {
+    const body = {
+      title,
+      category,
+      date: moment(date).format("YYYY-MM-DD"),
+      remark,
+      amount
+    }
+    console.log(body)
+    fetch('https://expense-tracker-api.azurewebsites.net/api/addRecord', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'applicaiton/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(response => response.status)
+      .then(status => {
+        if (status === 200) {
+          handleClickOpen()
+          setTitle('')
+          setCategory('')
+          setRemark('')
+          setAmount('')
+        }
+      })
+      
+  }
 
   return (
     <div className='flex justify-center'>
@@ -47,14 +92,13 @@ export default function Home() {
                   <InputLabel htmlFor="category">Category</InputLabel>
                   <Select native defaultValue="" id="category" label="Category" value={category} onChange={e => setCategory(e.target.value)}>
                     <option aria-label="None" value="" />
-                    <optgroup label="Category 1">
-                      <option value={1}>Option 1</option>
-                      <option value={2}>Option 2</option>
-                    </optgroup>
-                    <optgroup label="Category 2">
-                      <option value={3}>Option 3</option>
-                      <option value={4}>Option 4</option>
-                    </optgroup>
+                    {categories.length != 0 && categories.map(category => (
+                      <optgroup label={category.name} key={category.id}>
+                        {category.child_categories.length != 0 && category.child_categories.map(child => (
+                          <option value={child.id} key={child.id}>{child.name}</option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl className='mt-5 w-full'>
@@ -92,7 +136,27 @@ export default function Home() {
               </div>
             </CardContent>
             <CardActions>
-              <Button>Submit</Button>
+              <Button onClick={submit}>Submit</Button>
+              <Dialog
+                open={dialogOpen}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Information"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    You have successfully submit the record! Keep going and track your next record!
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} autoFocus>
+                    Great!
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </CardActions>
           </Card>
         </form>
